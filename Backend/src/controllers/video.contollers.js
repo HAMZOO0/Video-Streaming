@@ -187,6 +187,13 @@ const deleteVideo = asyncHandler(async (req, res) => {
   // Fetch the video by its ID and select specific fields
   const video = await Video.findById(videoId).select(" video_file thumbnail  ");
 
+  if (video?.owner.toString() !== req.user?._id.toString()) {
+    throw new ApiError(
+      400,
+      "You can't delete this video as you are not the owner"
+    );
+  }
+
   if (!video) {
     throw new API_Error_handler(404, "Video not found");
   }
