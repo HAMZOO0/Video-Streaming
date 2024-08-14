@@ -1,18 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
-const like_Schema = new Schema(
+const follow_Schema = new Schema(
   {
-    comment: {
+    follower: {
       type: Schema.Types.ObjectId, // one who is follow someone
-      ref: "Comment",
+      ref: "User",
     },
 
-    post: {
+    following: {
       type: Schema.Types.ObjectId, // one to  whom got follow
-      ref: "Post",
+      ref: "User",
     },
   },
   { timestamps: true }
 );
 
-export const Like = mongoose.model("Like", like_Schema);
+export const Follow = mongoose.model("Follow", follow_Schema);
