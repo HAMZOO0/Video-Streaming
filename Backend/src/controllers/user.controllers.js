@@ -234,7 +234,7 @@ const refresh_access_token = asyncHandler(async (req, res, next) => {
 const change_password = asyncHandler(async (req, res, next) => {
   const { oldPassword, newPassword } = req.body; // accessing the new and old passwrod
 
-  const user = await User.findById(req.user?._id); // here we find user which seding the req  for password change
+  const user = await User.findById(req.user?._id); // here we find user which sending the req  for password change
 
   const is_Password_Currect = await user.is_password_currect(oldPassword);
 

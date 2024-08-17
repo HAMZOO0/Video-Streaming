@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-import { error, log } from "console";
 import fs from "fs";
 
 // Configuration
@@ -23,7 +22,7 @@ const cloudinary_file_upload = async (file_path) => {
       resource_type: "auto", // we set auto resource_type  we also add video  , img etc here
     });
 
-    fs.unlinkSync(file_path);
+    fs.unlinkSync(file_path); // use to delete file
     return responce; // Return the response from cloudinary.upload
   } catch (error) {
     fs.unlinkSync(file_path); // we remove file from server which we save for tempratlly
