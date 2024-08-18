@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 // import {  } from "../middleware/authentication.middleware.js";
 import cookie from "cookie-parser";
 import { API_Error_handler } from "../utils/api_error_handler.js";
@@ -8,9 +8,7 @@ import {
   cloudinary_file_upload,
   cloudinary_file_delete,
 } from "../utils/cloudinary.js";
-import mongoose from "mongoose";
 import { genrate_access_and_refresh_token } from "../utils/genrate_token.js";
-import {} from "../middleware/authentication.middleware.js";
 const register_user = asyncHandler(async (req, res) => {
   //TODO
   /*
@@ -301,7 +299,7 @@ const user_profile = asyncHandler(async (req, res) => {
   // }
   // const normalizedUserName = user_name.toLowerCase().trim();
 
-  // // Query the user by normalized user_name
+  // Query the user by normalized user_name
   // const user = await User.findOne({ user_name: normalizedUserName });
 
   // if (!user) {
