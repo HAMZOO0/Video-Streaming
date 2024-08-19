@@ -190,11 +190,40 @@ const edit_post = asyncHandler(async (req, res) => {
     .json(new API_Responce(200, updated_post, "post updated successfullly"));
 });
 
-export { upload_post, getAllPosts, edit_post };
-/*
- getAllVideos,
-  updateVideo,
-  deleteVideo,
-  togglePublishStatus,
+const delete_post = asyncHandler(async (req, res) => {
+  let postID = req.params.postId;
 
-}; */
+  postID = new mongoose.Types.ObjectId(postID);
+
+  if (!postID) {
+    throw new API_Error_handler(400, "post id is required");
+  }
+
+  const post = await Post.findById(postID);
+
+  if (!postID) {
+    throw new API_Error_handler(404, "post not  found");
+  }
+
+  // we also need to delete the video or img we have with post
+  const video_to_delete = post.video?.field_id;
+  const post_img_to_delete = post.post_img?.field_id;
+
+  // if we found post
+  if (video_to_delete) {
+    await cloudinary_file_delete(video_to_delete);
+  }
+
+  if (post_img_to_delete) {
+    await cloudinary_file_delete(post_img_to_delete);
+  }
+
+  const deleted_post = await Post.deleteOne({ _id: postID });
+
+  if (deleted_post.deletedCount == 0) {
+    throw new API_Error_handler(500, "post deletion error");
+  }
+  return res.status(200).json(new API_Responce(200, null, "post deleted"));
+});
+
+export { upload_post, getAllPosts, edit_post, delete_post };
