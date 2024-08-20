@@ -128,7 +128,6 @@ const getLikedVideos = asyncHandler(async (req, res) => {
       $unwind: "$Video Detail",
     },
   ]);
-  console.log("videodetiaslksd ", like_video_list);
 
   return res
     .status(200)

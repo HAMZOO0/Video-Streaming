@@ -29,11 +29,11 @@ const getAllVideos = asyncHandler(async (req, res) => {
     sortType = "title",
   } = req.query;
 
-  if (!page || !limit || !sortBy || !sortType) {
-    throw new API_Error_handler(400, "something is missing in url");
-  }
+  // if (!page || !limit || !sortBy || !sortType) {
+  //   throw new API_Error_handler(400, "something is missing in url");
+  // }
 
-  const sort_type = sortType == "asc" ? 1 : -1; // convert into 1,-1
+  const sort_type = sortBy == "asc" ? 1 : -1; // convert into 1,-1
   const pageNumber = parseInt(page, 10);
   const limitNumber = parseInt(limit, 10); // 10 means decimal
   pageNumber;
@@ -70,13 +70,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
   pipline.push({
     // 3rd : sortby (title) sortype(1, asc  )
     $sort: {
-      sort_type,
+      [sortType]: sort_type, // Static property name
     },
-  });
-  pipline.push({
-    //4th for limit of 10
-    //  * Provide the number of documents to limit.
-    $limit: limitNumber,
   });
 
   pipline.push({
@@ -84,14 +79,21 @@ const getAllVideos = asyncHandler(async (req, res) => {
     $skip: skip,
   });
 
+  pipline.push({
+    //4th for limit of 10
+    //  * Provide the number of documents to limit.
+    $limit: limitNumber,
+  });
+
   const videos = await Video.aggregate(pipline);
 
   if (!videos) {
     throw new API_Error_handler(400, "something is missing in url");
   }
+  console.log(req.user?._id);
 
   const totalUserVideos = await Video.countDocuments({
-    Uploader_Name: req.user._id,
+    Uploader_Name: req.user?._id,
   });
 
   res.status(200).json(
@@ -207,7 +209,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
 
   const video_Delete = await Video.deleteOne({ _id: videoId });
   if (video_Delete.deletedCount == 0) {
-    throw new API_Error_handler(404, "Video deletion error");
+    throw new API_Error_handler(500, "Video deletion error");
   }
 
   res.status(200).json(new API_Responce(200, video_Delete, "Video Deleted"));

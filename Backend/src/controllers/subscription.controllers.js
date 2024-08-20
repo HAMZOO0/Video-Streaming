@@ -53,8 +53,6 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
   // Convert channelId to ObjectId
   const objectchannelId = new mongoose.Types.ObjectId(channelId);
-  console.log("Requested channelId:", channelId);
-  console.log("Converted ObjectId:", objectchannelId);
 
   // Perform the aggregation query
   const subscribers_list = await Subscription.aggregate([

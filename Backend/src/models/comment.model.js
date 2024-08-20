@@ -1,5 +1,5 @@
 import mongoose, { mongo, Mongoose, Schema, SchemaTypes } from "mongoose";
-// import mongoose_aggregate_paginate from "mongoose-aggregate-paginate-v2";
+import mongoose_aggregate_paginate from "mongoose-aggregate-paginate-v2";
 
 const comment_schema = new Schema(
   {
@@ -8,9 +8,9 @@ const comment_schema = new Schema(
       required: true,
     },
 
-    post: {
+    video: {
       type: Schema.Types.ObjectId,
-      ref: "Post",
+      ref: "Video",
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -20,6 +20,6 @@ const comment_schema = new Schema(
   { timestamps: true }
 );
 
-// comment_schema.plugin(mongoose_aggregate_paginate);
+comment_schema.plugin(mongoose_aggregate_paginate);
 
 export const Comment = mongoose.model("Comment", comment_schema);
